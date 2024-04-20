@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Location Tracker</title>
+<style>
+    body{
+        background-color: aqua;
+    }
+    h1{
+        color: brown;
+    }
+    #location{
+        color: green;
+        font-size: large;
+    }
+</style>
+</head>
+<body>
+<h1>Your Location</h1>
+<div id="location"></div>
+
+<script>
+  function showLocation(position) {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    var locationElement = document.getElementById('location');
+    locationElement.innerHTML = 'Latitude: ' + latitude + '<br>Longitude: ' + longitude;
+  }
+
+  function showError(error) {
+    var locationElement = document.getElementById('location');
+    switch(error.code) {
+      case error.PERMISSION_DENIED:
+        locationElement.innerHTML = "User denied the request for Geolocation.";
+        break;
+      case error.POSITION_UNAVAILABLE:
+        locationElement.innerHTML = "Location information is unavailable.";
+        break;
+      case error.TIMEOUT:
+        locationElement.innerHTML = "The request to get user location timed out.";
+        break;
+      case error.UNKNOWN_ERROR:
+        locationElement.innerHTML = "An unknown error occurred.";
+        break;
+    }
+  }
+
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showLocation, showError);
+    } else {
+      var locationElement = document.getElementById('location');
+      locationElement.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  }
+
+  // Ask for permission
+  var locationPermission = confirm("This website wants to access your location. Allow?");
+  if (locationPermission) {
+    getLocation();
+  } else {
+    var locationElement = document.getElementById('location');
+    locationElement.innerHTML = "Permission denied by user.";
+  }
+</script>
+</body>
+</html>
